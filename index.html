@@ -12,45 +12,61 @@
       box-sizing: border-box;
     }
     
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    
     body {
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(12px);
+      background: linear-gradient(135deg, #000000 0%, #0a0a0a 100%);
       font-family: 'Space Grotesk', sans-serif;
       color: white;
-      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+    }
+
+    .fullscreen-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
     }
 
     .leaderboard-container {
-      background: rgba(0,0,0,0.95);
+      background: rgba(20,20,20,0.95);
       border: 2px solid #333;
-      border-radius: 16px;
-      padding: 25px;
-      width: 420px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9);
     }
 
     /* Header */
     .leaderboard-header {
       text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
       border-bottom: 2px solid #333;
     }
 
     .leaderboard-title {
-      font-size: 24px;
+      font-size: 36px;
       font-weight: 900;
       color: #fff;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       letter-spacing: -0.5px;
     }
 
     .leaderboard-subtitle {
-      font-size: 12px;
+      font-size: 14px;
       color: rgba(255,255,255,0.5);
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -59,23 +75,23 @@
     /* Tabs */
     .tabs {
       display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 25px;
       background: #111;
-      padding: 4px;
-      border-radius: 8px;
+      padding: 6px;
+      border-radius: 10px;
     }
 
     .tab {
       flex: 1;
-      padding: 10px;
+      padding: 14px;
       background: transparent;
       border: none;
       color: rgba(255,255,255,0.5);
       font-weight: 700;
-      font-size: 13px;
+      font-size: 15px;
       cursor: pointer;
-      border-radius: 6px;
+      border-radius: 8px;
       transition: all 0.3s;
       font-family: 'Space Grotesk', sans-serif;
     }
@@ -89,24 +105,42 @@
       color: rgba(255,255,255,0.8);
     }
 
+    /* Entry count badge */
+    .entry-count {
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 20px;
+      background: #0a0a0a;
+      border-radius: 10px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+    }
+
+    .entry-count span {
+      color: #fff;
+      font-weight: 900;
+    }
+
     /* Leaderboard List */
     .leaderboard-list {
-      max-height: 550px;
+      flex: 1;
       overflow-y: auto;
+      padding-right: 10px;
     }
 
     .leaderboard-list::-webkit-scrollbar {
-      width: 8px;
+      width: 10px;
     }
 
     .leaderboard-list::-webkit-scrollbar-track {
       background: #111;
-      border-radius: 4px;
+      border-radius: 5px;
     }
 
     .leaderboard-list::-webkit-scrollbar-thumb {
       background: #333;
-      border-radius: 4px;
+      border-radius: 5px;
     }
 
     .leaderboard-list::-webkit-scrollbar-thumb:hover {
@@ -116,36 +150,36 @@
     .leaderboard-entry {
       background: #111;
       border: 1px solid #222;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 18px;
       transition: all 0.3s;
       position: relative;
     }
 
     .leaderboard-entry:hover {
       border-color: #444;
-      transform: translateX(4px);
+      transform: translateX(6px);
     }
 
     /* Medal Nameplates */
     .leaderboard-entry.top-1,
     .leaderboard-entry.top-2,
     .leaderboard-entry.top-3 {
-      padding: 18px 15px 15px 15px;
+      padding: 22px 18px 18px 18px;
     }
 
     .medal-nameplate {
       position: absolute;
-      top: -8px;
+      top: -10px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 16px;
+      padding: 5px 20px;
       border-radius: 20px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -193,26 +227,26 @@
     }
 
     .rank {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 900;
       color: rgba(255,255,255,0.3);
-      min-width: 35px;
+      min-width: 45px;
       text-align: center;
     }
 
     .rank.top-1 {
       color: #FFD700;
-      font-size: 24px;
+      font-size: 28px;
     }
 
     .rank.top-2 {
       color: #E8E8E8;
-      font-size: 22px;
+      font-size: 26px;
     }
 
     .rank.top-3 {
       color: #CD7F32;
-      font-size: 20px;
+      font-size: 24px;
     }
 
     .entry-info {
@@ -220,21 +254,21 @@
     }
 
     .username {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 900;
       color: white;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       letter-spacing: 0.3px;
     }
 
     .entry-stats {
-      font-size: 11px;
+      font-size: 12px;
       color: rgba(255,255,255,0.5);
       font-family: monospace;
     }
 
     .entry-value {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 900;
       text-align: right;
       white-space: nowrap;
@@ -248,51 +282,34 @@
       color: #888;
     }
 
-    /* Entry count badge */
-    .entry-count {
-      text-align: center;
-      padding: 10px;
-      margin-bottom: 15px;
-      background: #0a0a0a;
-      border-radius: 8px;
-      font-size: 12px;
-      color: rgba(255,255,255,0.6);
-      font-weight: 600;
-    }
-
-    .entry-count span {
-      color: #fff;
-      font-weight: 900;
-    }
-
     /* Empty State */
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
+      padding: 80px 20px;
       color: rgba(255,255,255,0.4);
     }
 
     .empty-icon {
-      font-size: 50px;
-      margin-bottom: 12px;
+      font-size: 70px;
+      margin-bottom: 15px;
       opacity: 0.3;
     }
 
     .empty-text {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     /* Refresh Button */
     .refresh-btn {
-      margin-top: 15px;
+      margin-top: 20px;
       width: 100%;
-      padding: 12px;
+      padding: 16px;
       background: #111;
       border: 2px solid #333;
       color: white;
       font-weight: 700;
-      font-size: 13px;
-      border-radius: 8px;
+      font-size: 15px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s;
       font-family: 'Space Grotesk', sans-serif;
@@ -304,40 +321,58 @@
       background: #fff;
       color: #000;
       border-color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 768px) {
+      .fullscreen-container {
+        padding: 20px;
+      }
+
+      .leaderboard-container {
+        padding: 25px;
+      }
+
+      .leaderboard-title {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="leaderboard-container">
-    <!-- Header -->
-    <div class="leaderboard-header">
-      <h2 class="leaderboard-title">Leaderboard</h2>
-      <p class="leaderboard-subtitle">Top 50 Traders</p>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('pnl')">PNL</button>
-      <button class="tab" onclick="switchTab('volume')">Volume</button>
-    </div>
-
-    <!-- Entry Count -->
-    <div class="entry-count" id="entryCount">
-      <span>0</span> traders on the board
-    </div>
-
-    <!-- Leaderboard List -->
-    <div class="leaderboard-list" id="leaderboardList">
-      <div class="empty-state">
-        <div class="empty-icon">🏆</div>
-        <div class="empty-text">No submissions yet. Be the first!</div>
+  <div class="fullscreen-container">
+    <div class="leaderboard-container">
+      <!-- Header -->
+      <div class="leaderboard-header">
+        <h2 class="leaderboard-title">Leaderboard</h2>
+        <p class="leaderboard-subtitle">Top 50 Traders</p>
       </div>
-    </div>
 
-    <!-- Refresh Button -->
-    <button class="refresh-btn" onclick="refreshLeaderboard()">
-      ↻ Refresh
-    </button>
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('pnl')">PNL</button>
+        <button class="tab" onclick="switchTab('volume')">Volume</button>
+      </div>
+
+      <!-- Entry Count -->
+      <div class="entry-count" id="entryCount">
+        <span>0</span> traders on the board
+      </div>
+
+      <!-- Leaderboard List -->
+      <div class="leaderboard-list" id="leaderboardList">
+        <div class="empty-state">
+          <div class="empty-icon">🏆</div>
+          <div class="empty-text">No submissions yet. Be the first!</div>
+        </div>
+      </div>
+
+      <!-- Refresh Button -->
+      <button class="refresh-btn" onclick="refreshLeaderboard()">
+        ↻ Refresh
+      </button>
+    </div>
   </div>
 
   <script>
@@ -345,7 +380,6 @@
     let currentTab = 'pnl';
     const MAX_ENTRIES = 50;
 
-    // Initialize - no demo data
     function initializeDemoData() {
       leaderboardData = [];
       renderLeaderboard();
@@ -354,7 +388,6 @@
     function switchTab(tab) {
       currentTab = tab;
       
-      // Update tab buttons
       document.querySelectorAll('.tab').forEach(btn => {
         btn.classList.remove('active');
       });
@@ -390,7 +423,6 @@
         return;
       }
 
-      // Sort by current tab and limit to top 50
       const sorted = [...leaderboardData].sort((a, b) => {
         if (currentTab === 'pnl') {
           return b.pnl - a.pnl;
@@ -399,7 +431,6 @@
         }
       }).slice(0, MAX_ENTRIES);
 
-      // Update entry count
       const totalCount = leaderboardData.length;
       const displayCount = Math.min(totalCount, MAX_ENTRIES);
       countEl.innerHTML = `<span>${displayCount}</span> / ${totalCount} traders shown`;
@@ -434,13 +465,11 @@
     }
 
     function addNewEntry(username, wallet, pnl, volume) {
-      // Check if username already exists
       const existingIndex = leaderboardData.findIndex(entry => 
         entry.username.toLowerCase() === username.toLowerCase()
       );
       
       if (existingIndex !== -1) {
-        // Update existing entry
         leaderboardData[existingIndex] = {
           username: username,
           wallet: wallet,
@@ -449,7 +478,6 @@
           timestamp: Date.now()
         };
       } else {
-        // Add new entry
         leaderboardData.push({
           username: username,
           wallet: wallet,
@@ -463,7 +491,6 @@
     }
 
     function refreshLeaderboard() {
-      // Send message to Portals to request refresh
       PortalsSdk.sendMessageToUnity(JSON.stringify({
         action: 'refreshLeaderboard'
       }));
@@ -471,7 +498,6 @@
       renderLeaderboard();
     }
 
-    // Listen for messages from PNL Tracker iframe
     PortalsSdk.setMessageListener(function(message) {
       let data = message;
       if (typeof message === 'string') {
@@ -494,7 +520,6 @@
       }
     });
 
-    // Initialize with demo data
     initializeDemoData();
   </script>
 </body>
