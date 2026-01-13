@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PNL Leaderboard</title>
+  <script src="https://portals-labs.github.io/portals-sdk/portals-sdk.js?v=10005456"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;900&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: transparent;
+      font-family: 'Space Grotesk', sans-serif;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .leaderboard-container {
+      background: rgba(0,0,0,0.95);
+      border: 2px solid #333;
+      border-radius: 16px;
+      padding: 25px;
+      width: 420px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+
+    /* Header */
+    .leaderboard-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #333;
+    }
+
+    .leaderboard-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 5px;
+      letter-spacing: -0.5px;
+    }
+
+    .leaderboard-subtitle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: #111;
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .tab.active {
+      background: #fff;
+      color: #000;
+    }
+
+    .tab:hover:not(.active) {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* Leaderboard List */
+    .leaderboard-list {
+      max-height: 550px;
+      overflow-y: auto;
+    }
+
+    .leaderboard-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-track {
+      background: #111;
+      border-radius: 4px;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+
+    .leaderboard-list::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .leaderboard-entry {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .leaderboard-entry:hover {
+      border-color: #444;
+      transform: translateX(4px);
+    }
+
+    /* Medal Nameplates */
+    .leaderboard-entry.top-1,
+    .leaderboard-entry.top-2,
+    .leaderboard-entry.top-3 {
+      padding: 18px 15px 15px 15px;
+    }
+
+    .medal-nameplate {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      border: 2px solid;
+    }
+
+    .leaderboard-entry.top-1 .medal-nameplate {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: #000;
+      border-color: #FFD700;
+      box-shadow: 0 4px 16px rgba(255,215,0,0.6);
+    }
+
+    .leaderboard-entry.top-2 .medal-nameplate {
+      background: linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 100%);
+      color: #000;
+      border-color: #E8E8E8;
+      box-shadow: 0 4px 16px rgba(192,192,192,0.6);
+    }
+
+    .leaderboard-entry.top-3 .medal-nameplate {
+      background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+      color: #fff;
+      border-color: #CD7F32;
+      box-shadow: 0 4px 16px rgba(205,127,50,0.6);
+    }
+
+    .leaderboard-entry.top-1 {
+      border-color: #FFD700;
+      background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,165,0,0.08) 100%);
+      box-shadow: 0 0 20px rgba(255,215,0,0.2);
+    }
+
+    .leaderboard-entry.top-2 {
+      border-color: #C0C0C0;
+      background: linear-gradient(135deg, rgba(232,232,232,0.08) 0%, rgba(192,192,192,0.08) 100%);
+      box-shadow: 0 0 20px rgba(192,192,192,0.2);
+    }
+
+    .leaderboard-entry.top-3 {
+      border-color: #CD7F32;
+      background: linear-gradient(135deg, rgba(205,127,50,0.08) 0%, rgba(139,69,19,0.08) 100%);
+      box-shadow: 0 0 20px rgba(205,127,50,0.2);
+    }
+
+    .rank {
+      font-size: 18px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.3);
+      min-width: 35px;
+      text-align: center;
+    }
+
+    .rank.top-1 {
+      color: #FFD700;
+      font-size: 24px;
+    }
+
+    .rank.top-2 {
+      color: #E8E8E8;
+      font-size: 22px;
+    }
+
+    .rank.top-3 {
+      color: #CD7F32;
+      font-size: 20px;
+    }
+
+    .entry-info {
+      flex: 1;
+    }
+
+    .username {
+      font-size: 15px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .entry-stats {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+    }
+
+    .entry-value {
+      font-size: 18px;
+      font-weight: 900;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .entry-value.positive {
+      color: #fff;
+    }
+
+    .entry-value.negative {
+      color: #888;
+    }
+
+    /* Entry count badge */
+    .entry-count {
+      text-align: center;
+      padding: 10px;
+      margin-bottom: 15px;
+      background: #0a0a0a;
+      border-radius: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-weight: 600;
+    }
+
+    .entry-count span {
+      color: #fff;
+      font-weight: 900;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .empty-icon {
+      font-size: 50px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+
+    .empty-text {
+      font-size: 14px;
+    }
+
+    /* Refresh Button */
+    .refresh-btn {
+      margin-top: 15px;
+      width: 100%;
+      padding: 12px;
+      background: #111;
+      border: 2px solid #333;
+      color: white;
+      font-weight: 700;
+      font-size: 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .refresh-btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="leaderboard-container">
+    <!-- Header -->
+    <div class="leaderboard-header">
+      <h2 class="leaderboard-title">Leaderboard</h2>
+      <p class="leaderboard-subtitle">Top 50 Traders</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('pnl')">PNL</button>
+      <button class="tab" onclick="switchTab('volume')">Volume</button>
+    </div>
+
+    <!-- Entry Count -->
+    <div class="entry-count" id="entryCount">
+      <span>0</span> traders on the board
+    </div>
+
+    <!-- Leaderboard List -->
+    <div class="leaderboard-list" id="leaderboardList">
+      <div class="empty-state">
+        <div class="empty-icon">🏆</div>
+        <div class="empty-text">No submissions yet. Be the first!</div>
+      </div>
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn" onclick="refreshLeaderboard()">
+      ↻ Refresh
+    </button>
+  </div>
+
+  <script>
+    let leaderboardData = [];
+    let currentTab = 'pnl';
+    const MAX_ENTRIES = 50;
+
+    // Initialize - no demo data
+    function initializeDemoData() {
+      leaderboardData = [];
+      renderLeaderboard();
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      renderLeaderboard();
+    }
+
+    function formatWallet(wallet) {
+      if (wallet.length <= 20) return wallet;
+      return wallet.substring(0, 8) + '...' + wallet.substring(wallet.length - 6);
+    }
+
+    function getMedalText(rank) {
+      if (rank === 1) return '🥇 Champion';
+      if (rank === 2) return '🥈 Runner Up';
+      if (rank === 3) return '🥉 Third Place';
+      return '';
+    }
+
+    function renderLeaderboard() {
+      const listEl = document.getElementById('leaderboardList');
+      const countEl = document.getElementById('entryCount');
+      
+      if (leaderboardData.length === 0) {
+        listEl.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🏆</div>
+            <div class="empty-text">No submissions yet. Be the first!</div>
+          </div>
+        `;
+        countEl.innerHTML = '<span>0</span> traders on the board';
+        return;
+      }
+
+      // Sort by current tab and limit to top 50
+      const sorted = [...leaderboardData].sort((a, b) => {
+        if (currentTab === 'pnl') {
+          return b.pnl - a.pnl;
+        } else {
+          return b.volume - a.volume;
+        }
+      }).slice(0, MAX_ENTRIES);
+
+      // Update entry count
+      const totalCount = leaderboardData.length;
+      const displayCount = Math.min(totalCount, MAX_ENTRIES);
+      countEl.innerHTML = `<span>${displayCount}</span> / ${totalCount} traders shown`;
+
+      let html = '';
+      sorted.forEach((entry, index) => {
+        const rank = index + 1;
+        const rankClass = rank === 1 ? 'top-1' : rank === 2 ? 'top-2' : rank === 3 ? 'top-3' : '';
+        const value = currentTab === 'pnl' ? entry.pnl : entry.volume;
+        const valueClass = currentTab === 'pnl' ? (value >= 0 ? 'positive' : 'negative') : 'positive';
+        const displayValue = currentTab === 'pnl' 
+          ? (value >= 0 ? '+' : '') + value.toFixed(2) + ' SOL'
+          : value.toFixed(2) + ' SOL';
+        const medalText = getMedalText(rank);
+
+        html += `
+          <div class="leaderboard-entry ${rankClass}">
+            ${medalText ? `<div class="medal-nameplate">${medalText}</div>` : ''}
+            <div class="rank ${rankClass}">#${rank}</div>
+            <div class="entry-info">
+              <div class="username">${entry.username}</div>
+              <div class="entry-stats">${formatWallet(entry.wallet)}</div>
+            </div>
+            <div class="entry-value ${valueClass}">
+              ${displayValue}
+            </div>
+          </div>
+        `;
+      });
+
+      listEl.innerHTML = html;
+    }
+
+    function addNewEntry(username, wallet, pnl, volume) {
+      // Check if username already exists
+      const existingIndex = leaderboardData.findIndex(entry => 
+        entry.username.toLowerCase() === username.toLowerCase()
+      );
+      
+      if (existingIndex !== -1) {
+        // Update existing entry
+        leaderboardData[existingIndex] = {
+          username: username,
+          wallet: wallet,
+          pnl: parseFloat(pnl),
+          volume: parseFloat(volume),
+          timestamp: Date.now()
+        };
+      } else {
+        // Add new entry
+        leaderboardData.push({
+          username: username,
+          wallet: wallet,
+          pnl: parseFloat(pnl),
+          volume: parseFloat(volume),
+          timestamp: Date.now()
+        });
+      }
+      
+      renderLeaderboard();
+    }
+
+    function refreshLeaderboard() {
+      // Send message to Portals to request refresh
+      PortalsSdk.sendMessageToUnity(JSON.stringify({
+        action: 'refreshLeaderboard'
+      }));
+      
+      renderLeaderboard();
+    }
+
+    // Listen for messages from PNL Tracker iframe
+    PortalsSdk.setMessageListener(function(message) {
+      let data = message;
+      if (typeof message === 'string') {
+        try { 
+          data = JSON.parse(message); 
+        } catch (e) { 
+          data = message;
+        }
+      }
+      
+      console.log('Leaderboard received:', data);
+      
+      if (data.action === 'leaderboardUpdate') {
+        const username = data.username || 'Anonymous';
+        const wallet = formatWallet(data.wallet || 'Unknown');
+        const pnl = data.pnl || 0;
+        const volume = data.volume || 0;
+        
+        addNewEntry(username, wallet, pnl, volume);
+      }
+    });
+
+    // Initialize with demo data
+    initializeDemoData();
+  </script>
+</body>
+</html>
